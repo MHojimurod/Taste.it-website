@@ -24,7 +24,7 @@
         </a>
         <div class="text px-4 pt-3 pb-4">
           <div class="meta">
-            <div><a href="{% url 'blog-single' pk=i.id %}">{{i.created_at|date:"l , A"}}</a></div>
+            <div><a href="{% url 'blog-single' pk=i.id %}">{{i.created_at|date:"D, d M, Y G i"}}</a></div>
             <div><a href="{% url 'blog-single' pk=i.id %}">{{i.author}}</a></div>
           </div>
           <h3 class="heading"><a href="{% url 'blog-single' pk=i.id %}">{{i.description}}</a></h3>

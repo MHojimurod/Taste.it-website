@@ -7,7 +7,7 @@ from django.core.paginator import Paginator, EmptyPage
 def home(request):
     category = Category.objects.all()
     products = Product.objects.all()
-    blog = Blog.objects.all()
+    blog = Blog.objects.all().order_by('-created_at')[:6]
     model = Booking()
     form = BookingForm(request.POST, instance=model)
     if request.POST:
@@ -72,8 +72,8 @@ def reservation(request):
 
 
 def blogs(request):
-    blog = Blog.objects.all()
-    p = Paginator(blog, 4)
+    blog = Blog.objects.all().order_by('-created_at')
+    p = Paginator(blog, 6)
     page_num = request.GET.get('page', 1)
     try:
         page = p.page(page_num)
@@ -81,14 +81,14 @@ def blogs(request):
         page = p.page(1)
     total = len(blog)
     total_num = 0
-    if total < 2 or total > 2:
-        if total < 2:
+    if total < 6 or total > 6:
+        if total < 6:
             total_num += 1
         else:
-            if total % 2 < 2:
-                total_num += (total // 2 + 1)
-            elif total % 2 == 0:
-                total_num += (total // 2)
+            if total % 6 < 6:
+                total_num += (total // 6 + 1)
+            elif total % 6 == 0:
+                total_num += (total // 6)
 
     ctx = {
         'b_active': 'active',
@@ -132,3 +132,25 @@ def contact(request):
         'form': form
     }
     return render(request, 'main/contact.html', ctx)
+
+
+from django.core.mail import BadHeaderError, send_mail
+from django.http import HttpResponse, HttpResponseRedirect
+
+# def send_email(request):
+#     subject = request.POST.get('subject', '')
+#     message = request.POST.get('message', '')
+#     from_email = request.POST.get('from_email', '')
+#     print(subject,message,from_email)
+#     if subject and message and from_email:
+#         try:
+#             send_mail(subject, message, from_email, ['cool.hojimurod2001@gmail.com'])
+#         except BadHeaderError:
+#             print(BadHeaderError)
+#         #     return HttpResponse('Invalid header found.')
+#         # return HttpResponseRedirect('/contact/thanks/')
+#     # else:
+#         # In reality we'd use a form class
+#         # to get proper validation errors.
+#         # return HttpResponse('Make sure all fields are entered and valid.')
+#     return render(request,'main/send_email.html')

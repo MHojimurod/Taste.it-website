@@ -10,4 +10,6 @@ urlpatterns = [
     path('blog/', views.blogs, name='blog'),
     path('<int:pk>/blog-single/', views.blog_single, name='blog-single'),
     path('contact/', views.contact, name='contact'),
+    # path('send_email/', views.send_email, name='send_email'),
+
 ]
